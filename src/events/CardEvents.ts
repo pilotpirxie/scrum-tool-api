@@ -1,4 +1,4 @@
-type CardEvents = {
+export type IncomingCardEvents = {
   CreateCard: (content: string, column: number) => void;
   UpdateCard: (cardId: number, content: string) => void;
   DeleteCard: (cardId: number) => void;
@@ -8,5 +8,15 @@ type CardEvents = {
   UpvoteCard: (cardId: number) => void;
   DownvoteCard: (cardId: number) => void;
 }
-
-export default CardEvents;
+export type OutgoingCardEvents = {
+  CardState: () => {
+    id: number;
+    stackedOn: number;
+    content: string;
+    userId: number;
+    column: number;
+    votes: number;
+    createdAt: Date;
+    updatedAt: Date;
+  };
+}

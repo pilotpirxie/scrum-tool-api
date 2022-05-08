@@ -11,6 +11,7 @@ CREATE TABLE "users" (
   "id" SERIAL PRIMARY KEY NOT NULL,
   "sid" varchar(256) NOT NULL,
   "board_id" int NOT NULL,
+  "is_ready" boolean NOT NULL,
   "nickname" varchar(64) NOT NULL,
   "avatar" int NOT NULL,
   "created_at" datetime NOT NULL,
