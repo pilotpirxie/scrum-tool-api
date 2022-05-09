@@ -5,11 +5,11 @@ export type IncomingUserEvents = {
 }
 
 export type OutgoingUserEvents = {
-  UserState: () => {
-    nickname: string;
-    avatarId: number;
-    isReady: boolean;
-    createdAt: number;
-    updatedAt: number;
-  };
+  UserState: (user: {
+    nickname: string,
+    avatarId: number,
+    isReady: boolean,
+    createdAt: number,
+    updatedAt: number,
+  }) => void;
 }

@@ -11,15 +11,23 @@ import {
 } from 'typeorm';
 import Boards from './Boards';
 import Votes from './Votes';
+import Users from './Users';
 
 @Entity()
 export default class Cards extends BaseEntity {
-  @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn('uuid')
+    id: string;
 
   @ManyToOne(() => Boards, (board) => board.cards)
   @JoinColumn({ name: 'board_id' })
-    boardId: Boards;
+    board: Boards;
+
+  @OneToMany(() => Votes, (vote) => vote.card)
+    votes: Votes[];
+
+  @ManyToOne(() => Users, (user) => user.cards)
+  @JoinColumn({ name: 'user_id' })
+    user: Users;
 
   @Column({
     type: 'varchar',
@@ -33,12 +41,6 @@ export default class Cards extends BaseEntity {
     name: 'stacked_on',
   })
     stackedOn: number;
-
-  @Column({
-    type: 'integer',
-    name: 'user_id',
-  })
-    userId: number;
 
   @Column({
     type: 'integer',
@@ -57,7 +59,4 @@ export default class Cards extends BaseEntity {
     name: 'updated_at',
   })
     updatedAt: Date;
-
-  @OneToMany(() => Votes, (vote) => vote.cardId)
-    votes: Votes[];
 }

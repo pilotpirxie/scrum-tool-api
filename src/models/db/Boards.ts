@@ -12,15 +12,14 @@ import Users from './Users';
 
 @Entity()
 export default class Boards extends BaseEntity {
-  @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn('uuid')
+    id: string;
 
-  @Column({
-    type: 'varchar',
-    length: 64,
-    name: 'name',
-  })
-    code: string;
+  @OneToMany(() => Cards, (card) => card.board)
+    cards: Cards[];
+
+  @OneToMany(() => Users, (user) => user.board)
+    users: Users[];
 
   @Column({
     type: 'integer',
@@ -45,10 +44,4 @@ export default class Boards extends BaseEntity {
     name: 'updated_at',
   })
     updatedAt: Date;
-
-  @OneToMany(() => Cards, (card) => card.boardId)
-    cards: Cards[];
-
-  @OneToMany(() => Users, (user) => user.boardId)
-    users: Users[];
 }

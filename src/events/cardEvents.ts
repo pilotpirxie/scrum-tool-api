@@ -9,14 +9,14 @@ export type IncomingCardEvents = {
   DownvoteCard: (cardId: number) => void;
 }
 export type OutgoingCardEvents = {
-  CardState: () => {
-    id: number;
-    stackedOn: number;
-    content: string;
-    userId: number;
-    column: number;
-    votes: number;
-    createdAt: Date;
-    updatedAt: Date;
-  };
+  CardState: (card: {
+    id: number,
+    stackedOn: number,
+    content: string,
+    userId: number,
+    column: number,
+    votes: number,
+    createdAt: Date,
+    updatedAt: Date,
+  }) => void;
 }

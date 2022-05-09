@@ -15,8 +15,18 @@ import Cards from './Cards';
 
 @Entity()
 export default class Users extends BaseEntity {
-  @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn('uuid')
+    id: string;
+
+  @OneToMany(() => Votes, (vote) => vote.user)
+    votes: Votes[];
+
+  @OneToMany(() => Cards, (card) => card.user)
+    cards: Cards[];
+
+  @ManyToOne(() => Boards, (board) => board.users)
+  @JoinColumn({ name: 'board_id' })
+    board: Boards;
 
   @Column({
     type: 'varchar',
@@ -24,10 +34,6 @@ export default class Users extends BaseEntity {
     name: 'sid',
   })
     sid: string;
-
-  @ManyToOne(() => Boards, (board) => board.users)
-  @JoinColumn({ name: 'board_id' })
-    boardId: number;
 
   @Column({
     type: 'boolean',
@@ -59,7 +65,4 @@ export default class Users extends BaseEntity {
     name: 'updated_at',
   })
     updatedAt: Date;
-
-  @OneToMany(() => Cards, (card) => card.userId)
-    votes: Votes[];
 }

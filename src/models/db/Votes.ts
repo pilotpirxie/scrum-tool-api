@@ -12,16 +12,16 @@ import Cards from './Cards';
 
 @Entity()
 export default class Votes extends BaseEntity {
-  @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn('uuid')
+    id: string;
 
   @ManyToOne(() => Cards, (cards) => cards.votes)
   @JoinColumn({ name: 'card_id' })
-    cardId: number;
+    card: Cards;
 
   @ManyToOne(() => Users, (user) => user.votes)
   @JoinColumn({ name: 'user_id' })
-    userId: number;
+    user: Users;
 
   @CreateDateColumn({
     type: 'timestamp',
