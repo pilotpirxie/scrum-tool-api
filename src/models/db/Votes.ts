@@ -1,11 +1,17 @@
 import {
-  CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn,
+  BaseEntity,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import Users from './Users';
 import Cards from './Cards';
 
 @Entity()
-export default class Votes {
+export default class Votes extends BaseEntity {
   @PrimaryGeneratedColumn()
     id: number;
 
