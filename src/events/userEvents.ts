@@ -1,15 +1,12 @@
+import { RawUser } from '../models/db/Users';
+
 export type IncomingUserEvents = {
-  Join: (boardId: number, boardCode: string, nickname: string) => void;
+  Join: (boardId: string, nickname: string) => void;
   ToggleReady: () => void;
   ChangeUserData: (nickname: string, avatarId: number) => void;
 }
 
 export type OutgoingUserEvents = {
-  UserState: (user: {
-    nickname: string,
-    avatarId: number,
-    isReady: boolean,
-    createdAt: number,
-    updatedAt: number,
-  }) => void;
+  UserState: (user: RawUser) => void;
+  UsersState: (users: RawUser[]) => void;
 }

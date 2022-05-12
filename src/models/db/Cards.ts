@@ -72,7 +72,7 @@ export type RawCard = {
   updatedAt: Date,
 }
 
-export function getRawObject(card: Cards): RawCard {
+export function getRawCard(card: Cards): RawCard {
   return {
     id: card.id,
     stackedOn: card.stackedOn,

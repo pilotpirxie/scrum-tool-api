@@ -23,5 +23,6 @@ module.exports = {
     '@typescript-eslint/no-unused-vars': ['error'],
     'no-console': ['error', { allow: ['warn', 'error', 'info'] }],
     'import/no-cycle': 'off',
+    'no-param-reassign': 'off',
   },
 };

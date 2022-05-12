@@ -13,5 +13,5 @@ export type IncomingCardEvents = {
 export type OutgoingCardEvents = {
   CardState: (card: RawCard) => void;
   DeleteCard: (cardId: string) => void;
-  GetCards: (cards: RawCard[]) => void;
+  CardsState: (cards: RawCard[]) => void;
 }

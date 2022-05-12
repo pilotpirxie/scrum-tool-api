@@ -2,7 +2,7 @@ import { Socket } from 'socket.io';
 import Joi from 'joi';
 import { IncomingEvents, OutgoingEvents } from '../events';
 import { User } from '../models/socket/User';
-import Cards, { getRawObject } from '../models/db/Cards';
+import Cards, { getRawCard } from '../models/db/Cards';
 import Votes from '../models/db/Votes';
 
 const registerCardHandlers = (socket: Socket<IncomingEvents, OutgoingEvents, {}, User>) => {
@@ -30,7 +30,8 @@ const registerCardHandlers = (socket: Socket<IncomingEvents, OutgoingEvents, {},
         stackedOn: '',
       });
 
-      socket.emit('CardState', getRawObject(card));
+      socket.to(socket.data.boardId || '')
+        .emit('CardState', getRawCard(card));
     } catch (error) {
       console.error(error);
     }
@@ -61,7 +62,8 @@ const registerCardHandlers = (socket: Socket<IncomingEvents, OutgoingEvents, {},
 
       await card.save();
 
-      socket.emit('CardState', getRawObject(card));
+      socket.to(socket.data.boardId || '')
+        .emit('CardState', getRawCard(card));
     } catch (error) {
       console.error(error);
     }
@@ -78,7 +80,8 @@ const registerCardHandlers = (socket: Socket<IncomingEvents, OutgoingEvents, {},
         id: cardId,
       });
 
-      socket.emit('DeleteCard', cardId);
+      socket.to(socket.data.boardId || '')
+        .emit('DeleteCard', cardId);
     } catch (error) {
       console.error(error);
     }
@@ -94,9 +97,10 @@ const registerCardHandlers = (socket: Socket<IncomingEvents, OutgoingEvents, {},
         },
       });
 
-      const rawCards = cards.map((card) => getRawObject(card));
+      const rawCards = cards.map((card) => getRawCard(card));
 
-      socket.emit('GetCards', rawCards);
+      socket.to(socket.data.boardId || '')
+        .emit('CardsState', rawCards);
     } catch (error) {
       console.error(error);
     }
@@ -127,7 +131,8 @@ const registerCardHandlers = (socket: Socket<IncomingEvents, OutgoingEvents, {},
 
       await card.save();
 
-      socket.emit('CardState', getRawObject(card));
+      socket.to(socket.data.boardId || '')
+        .emit('CardState', getRawCard(card));
     } catch (error) {
       console.error(error);
     }
@@ -153,7 +158,8 @@ const registerCardHandlers = (socket: Socket<IncomingEvents, OutgoingEvents, {},
 
       await card.save();
 
-      socket.emit('CardState', getRawObject(card));
+      socket.to(socket.data.boardId || '')
+        .emit('CardState', getRawCard(card));
     } catch (error) {
       console.error(error);
     }
@@ -184,7 +190,8 @@ const registerCardHandlers = (socket: Socket<IncomingEvents, OutgoingEvents, {},
         return;
       }
 
-      socket.emit('CardState', getRawObject(card));
+      socket.to(socket.data.boardId || '')
+        .emit('CardState', getRawCard(card));
     } catch (error) {
       console.error(error);
     }
@@ -221,7 +228,8 @@ const registerCardHandlers = (socket: Socket<IncomingEvents, OutgoingEvents, {},
         return;
       }
 
-      socket.emit('CardState', getRawObject(card));
+      socket.to(socket.data.boardId || '')
+        .emit('CardState', getRawCard(card));
     } catch (error) {
       console.error(error);
     }
