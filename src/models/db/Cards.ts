@@ -37,10 +37,10 @@ export default class Cards extends BaseEntity {
     content: string;
 
   @Column({
-    type: 'integer',
+    type: 'varchar',
     name: 'stacked_on',
   })
-    stackedOn: number;
+    stackedOn: string;
 
   @Column({
     type: 'integer',
