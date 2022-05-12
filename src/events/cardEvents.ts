@@ -5,7 +5,7 @@ export type IncomingCardEvents = {
   UpdateCard: (cardId: string, content: string) => void;
   DeleteCard: (cardId: string) => void;
   GetCards: () => void;
-  GroupCards: (cardId: string, stackedOn: number) => void;
+  GroupCards: (cardId: string, stackedOn: string) => void;
   UngroupCards: (cardId: string) => void;
   UpvoteCard: (cardId: string) => void;
   DownvoteCard: (cardId: string) => void;
@@ -13,4 +13,5 @@ export type IncomingCardEvents = {
 export type OutgoingCardEvents = {
   CardState: (card: RawCard) => void;
   DeleteCard: (cardId: string) => void;
+  GetCards: (cards: RawCard[]) => void;
 }
