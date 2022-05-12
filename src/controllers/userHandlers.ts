@@ -1,11 +1,14 @@
-import { Socket } from 'socket.io';
+import { Server, Socket } from 'socket.io';
 import Joi from 'joi';
 import { IncomingEvents, OutgoingEvents } from '../events';
 import { User } from '../models/socket/User';
 import Boards from '../models/db/Boards';
 import Users, { getRawUser } from '../models/db/Users';
 
-const registerUserHandlers = (socket: Socket<IncomingEvents, OutgoingEvents, {}, User>) => {
+const registerUserHandlers = (
+  io: Server<IncomingEvents, OutgoingEvents, {}, User>,
+  socket: Socket<IncomingEvents, OutgoingEvents, {}, User>,
+) => {
   socket.on('disconnect', () => {
     console.info('disconnected');
   });
@@ -59,21 +62,70 @@ const registerUserHandlers = (socket: Socket<IncomingEvents, OutgoingEvents, {},
 
       const rawUsers = users.map((tmpUser) => getRawUser(tmpUser));
 
-      socket.to(socket.data.boardId || '')
+      io.to(socket.data.boardId || '')
         .emit('UsersState', rawUsers);
     } catch (error) {
       console.error(error);
     }
   });
 
-  socket.on('ToggleReady', () => {
-    // toggle ready status
-    // send ready status to all users in the room
+  socket.on('ToggleReady', async () => {
+    try {
+      const user = await Users.findOne({
+        where: {
+          id: socket.data.userId,
+        },
+      });
+
+      if (!user) {
+        console.error(`ToggleReady: User not found: ${socket.data.userId}`);
+        return;
+      }
+
+      user.isReady = !user.isReady;
+
+      await user.save();
+
+      socket.to(socket.data.boardId || '')
+        .emit('UserState', getRawUser(user));
+    } catch (error) {
+      console.error(error);
+    }
   });
 
-  socket.on('ChangeUserData', (nickname: string, avatarId: number) => {
-    // change user data
-    // send user data to all users in the room
+  socket.on('ChangeUserData', async (nickname: string, avatar: number) => {
+    try {
+      if (Joi.string().validate(nickname).error) {
+        console.error(`ChangeUserData: Invalid nickname: ${nickname}`);
+        return;
+      }
+
+      if (Joi.number().validate(avatar).error) {
+        console.error(`ChangeUserData: Invalid avatar: ${avatar}`);
+        return;
+      }
+
+      const user = await Users.findOne({
+        where: {
+          id: socket.data.userId,
+        },
+      });
+
+      if (!user) {
+        console.error(`ChangeUserData: User not found: ${socket.data.userId}`);
+        return;
+      }
+
+      user.nickname = nickname;
+      user.avatar = avatar;
+
+      await user.save();
+
+      socket.to(socket.data.boardId || '')
+        .emit('UserState', getRawUser(user));
+    } catch (error) {
+      console.error(error);
+    }
   });
 };
 

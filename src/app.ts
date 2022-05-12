@@ -24,9 +24,9 @@ AppDataSource.initialize().then(async () => {
 const io = new Server<IncomingEvents, OutgoingEvents, {}, User>();
 
 io.on('connection', (socket: Socket<IncomingEvents, OutgoingEvents, {}, User>) => {
-  registerUserHandlers(socket);
-  registerCardHandlers(socket);
-  registerBoardHandlers(socket);
+  registerUserHandlers(io, socket);
+  registerCardHandlers(io, socket);
+  registerBoardHandlers(io, socket);
 });
 
 app.get('/', (req: Request, res: Response) => {

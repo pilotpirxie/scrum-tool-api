@@ -1,11 +1,14 @@
-import { Socket } from 'socket.io';
+import { Server, Socket } from 'socket.io';
 import Joi from 'joi';
 import { IncomingEvents, OutgoingEvents } from '../events';
 import { User } from '../models/socket/User';
 import Cards, { getRawCard } from '../models/db/Cards';
 import Votes from '../models/db/Votes';
 
-const registerCardHandlers = (socket: Socket<IncomingEvents, OutgoingEvents, {}, User>) => {
+const registerCardHandlers = (
+  io: Server<IncomingEvents, OutgoingEvents, {}, User>,
+  socket: Socket<IncomingEvents, OutgoingEvents, {}, User>,
+) => {
   socket.on('CreateCard', async (content: string, column: number) => {
     try {
       if (Joi.string().min(1).max(512).validate(content).error) {
@@ -99,8 +102,7 @@ const registerCardHandlers = (socket: Socket<IncomingEvents, OutgoingEvents, {},
 
       const rawCards = cards.map((card) => getRawCard(card));
 
-      socket.to(socket.data.boardId || '')
-        .emit('CardsState', rawCards);
+      socket.emit('CardsState', rawCards);
     } catch (error) {
       console.error(error);
     }

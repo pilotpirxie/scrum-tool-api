@@ -1,11 +1,14 @@
-import { Socket } from 'socket.io';
+import { Server, Socket } from 'socket.io';
 import dayjs from 'dayjs';
 import Joi from 'joi';
 import { IncomingEvents, OutgoingEvents } from '../events';
 import { User } from '../models/socket/User';
 import Boards from '../models/db/Boards';
 
-const registerBoardHandlers = (socket: Socket<IncomingEvents, OutgoingEvents, {}, User>) => {
+const registerBoardHandlers = (
+  io: Server<IncomingEvents, OutgoingEvents, {}, User>,
+  socket: Socket<IncomingEvents, OutgoingEvents, {}, User>,
+) => {
   socket.on('SetTimer', async (duration: number) => {
     try {
       if (Joi.number().allow(60, 120, 180, 300, 600, 900).validate(duration).error) {
