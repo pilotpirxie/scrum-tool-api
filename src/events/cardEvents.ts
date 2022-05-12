@@ -1,22 +1,16 @@
+import { RawCard } from '../models/db/Cards';
+
 export type IncomingCardEvents = {
   CreateCard: (content: string, column: number) => void;
-  UpdateCard: (cardId: number, content: string) => void;
-  DeleteCard: (cardId: number) => void;
+  UpdateCard: (cardId: string, content: string) => void;
+  DeleteCard: (cardId: string) => void;
   GetCards: () => void;
-  GroupCards: (cardId: number, stackedOn: number) => void;
-  UngroupCards: (cardId: number) => void;
-  UpvoteCard: (cardId: number) => void;
-  DownvoteCard: (cardId: number) => void;
+  GroupCards: (cardId: string, stackedOn: number) => void;
+  UngroupCards: (cardId: string) => void;
+  UpvoteCard: (cardId: string) => void;
+  DownvoteCard: (cardId: string) => void;
 }
 export type OutgoingCardEvents = {
-  CardState: (card: {
-    id: number,
-    stackedOn: number,
-    content: string,
-    userId: number,
-    column: number,
-    votes: number,
-    createdAt: Date,
-    updatedAt: Date,
-  }) => void;
+  CardState: (card: RawCard) => void;
+  DeleteCard: (cardId: string) => void;
 }

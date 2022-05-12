@@ -29,32 +29,36 @@ const registerBoardHandlers = (socket: Socket<IncomingEvents, OutgoingEvents, {}
 
       socket.to(socket.data.boardId || '')
         .emit('BoardConfig', { stage: board.stage, timerTo: board.timerTo });
-    } catch (err) {
-      console.error(err);
+    } catch (error) {
+      console.error(error);
     }
   });
 
   socket.on('SetStage', async (stage: number) => {
-    if (Joi.number().allow(0, 1, 2).validate(stage).error) {
-      console.error(`SetStage: Invalid stage: ${stage}`);
-      return;
+    try {
+      if (Joi.number().allow(0, 1, 2).validate(stage).error) {
+        console.error(`SetStage: Invalid stage: ${stage}`);
+        return;
+      }
+
+      const board = await Boards.findOneBy({
+        id: socket.data.boardId,
+      });
+
+      if (!board) {
+        console.error(`SetStage: Board not found: ${socket.data.boardId}`);
+        return;
+      }
+
+      board.stage = stage;
+
+      await board.save();
+
+      socket.to(socket.data.boardId || '')
+        .emit('BoardConfig', { stage: board.stage, timerTo: board.timerTo });
+    } catch (error) {
+      console.error(error);
     }
-
-    const board = await Boards.findOneBy({
-      id: socket.data.boardId,
-    });
-
-    if (!board) {
-      console.error(`SetStage: Board not found: ${socket.data.boardId}`);
-      return;
-    }
-
-    board.stage = stage;
-
-    await board.save();
-
-    socket.to(socket.data.boardId || '')
-      .emit('BoardConfig', { stage: board.stage, timerTo: board.timerTo });
   });
 };
 

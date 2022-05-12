@@ -60,3 +60,27 @@ export default class Cards extends BaseEntity {
   })
     updatedAt: Date;
 }
+
+export type RawCard = {
+  id: string,
+  stackedOn: string,
+  content: string,
+  userId: string,
+  column: number,
+  votes: number,
+  createdAt: Date,
+  updatedAt: Date,
+}
+
+export function getRawObject(card: Cards): RawCard {
+  return {
+    id: card.id,
+    stackedOn: card.stackedOn,
+    content: card.content,
+    userId: card.user.id,
+    column: card.column,
+    votes: card.votes.length,
+    createdAt: card.createdAt,
+    updatedAt: card.updatedAt,
+  };
+}
