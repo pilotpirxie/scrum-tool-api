@@ -103,7 +103,7 @@ const registerUsersHandlers = (
       const rawCards = cards.map((card) => getRawCard(card));
 
       io.to(socket.data.boardId)
-        .emit('Joined', { users: rawUsers, board: { id: board.id, stage: board.stage, timerTo: board.timerTo }, cards: rawCards });
+        .emit('Joined', { users: rawUsers, board: { id: board.id, stage: board.stage, timerTo: board.timerTo.toString() }, cards: rawCards });
     } catch (error) {
       console.error(error);
     }

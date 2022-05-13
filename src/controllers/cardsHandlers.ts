@@ -31,9 +31,10 @@ const registerCardsHandlers = (
           id: socket.data.userId,
         },
         stackedOn: '',
-      });
+        votes: [],
+      }).save();
 
-      socket.to(socket.data.boardId || '')
+      io.to(socket.data.boardId || '')
         .emit('CardState', { card: getRawCard(card) });
     } catch (error) {
       console.error(error);

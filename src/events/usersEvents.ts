@@ -11,7 +11,7 @@ export type OutgoingUsersEvents = {
   Joined: (data: {
     users: RawUser[],
     cards: RawCard[],
-    board: {id: string, stage: number, timerTo: Date}
+    board: {id: string, stage: number, timerTo: string}
   }) => void;
   UserState: (data: {user: RawUser}) => void;
   UsersState: (data: {users: RawUser[]}) => void;

@@ -71,6 +71,8 @@ export type RawCard = {
 }
 
 export function getRawCard(card: Cards): RawCard {
+  // eslint-disable-next-line no-console
+  console.log(card);
   return {
     id: card.id,
     stackedOn: card.stackedOn,

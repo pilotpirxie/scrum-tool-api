@@ -74,6 +74,7 @@ export default class Users extends BaseEntity {
 }
 
 export type RawUser = {
+  id: string,
   nickname: string,
   avatar: number,
   isReady: boolean,
@@ -81,6 +82,7 @@ export type RawUser = {
 
 export function getRawUser(user: Users): RawUser {
   return {
+    id: user.id,
     avatar: user.avatar,
     isReady: user.isReady,
     nickname: user.nickname,
