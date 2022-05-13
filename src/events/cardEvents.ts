@@ -1,17 +1,17 @@
 import { RawCard } from '../models/db/Cards';
 
 export type IncomingCardEvents = {
-  CreateCard: (content: string, column: number) => void;
-  UpdateCard: (cardId: string, content: string) => void;
-  DeleteCard: (cardId: string) => void;
+  CreateCard: (data: {content: string, column: number}) => void;
+  UpdateCard: (data: {cardId: string, content: string}) => void;
+  DeleteCard: (data: {cardId: string}) => void;
   GetCards: () => void;
-  GroupCards: (cardId: string, stackedOn: string) => void;
-  UngroupCards: (cardId: string) => void;
-  UpvoteCard: (cardId: string) => void;
-  DownvoteCard: (cardId: string) => void;
+  GroupCards: (data: {cardId: string, stackedOn: string}) => void;
+  UngroupCards: (data: {cardId: string}) => void;
+  UpvoteCard: (data: {cardId: string}) => void;
+  DownvoteCard: (data: {cardId: string}) => void;
 }
 export type OutgoingCardEvents = {
-  CardState: (card: RawCard) => void;
-  DeleteCard: (cardId: string) => void;
-  CardsState: (cards: RawCard[]) => void;
+  CardState: (data: {card: RawCard}) => void;
+  DeleteCard: (data: {cardId: string}) => void;
+  CardsState: (data: {cards: RawCard[]}) => void;
 }

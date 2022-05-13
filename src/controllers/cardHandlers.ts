@@ -9,7 +9,7 @@ const registerCardHandlers = (
   io: Server<IncomingEvents, OutgoingEvents, {}, User>,
   socket: Socket<IncomingEvents, OutgoingEvents, {}, User>,
 ) => {
-  socket.on('CreateCard', async (content: string, column: number) => {
+  socket.on('CreateCard', async ({ content, column }) => {
     try {
       if (Joi.string().min(1).max(512).validate(content).error) {
         console.error(`CreateCard: Invalid content: ${content}`);
@@ -34,13 +34,13 @@ const registerCardHandlers = (
       });
 
       socket.to(socket.data.boardId || '')
-        .emit('CardState', getRawCard(card));
+        .emit('CardState', { card: getRawCard(card) });
     } catch (error) {
       console.error(error);
     }
   });
 
-  socket.on('UpdateCard', async (cardId: string, content: string) => {
+  socket.on('UpdateCard', async ({ cardId, content }) => {
     try {
       if (Joi.string().min(1).max(512).validate(content).error) {
         console.error(`UpdateCard: Invalid content: ${content}`);
@@ -66,13 +66,13 @@ const registerCardHandlers = (
       await card.save();
 
       socket.to(socket.data.boardId || '')
-        .emit('CardState', getRawCard(card));
+        .emit('CardState', { card: getRawCard(card) });
     } catch (error) {
       console.error(error);
     }
   });
 
-  socket.on('DeleteCard', async (cardId: string) => {
+  socket.on('DeleteCard', async ({ cardId }) => {
     try {
       if (Joi.string().validate(cardId).error) {
         console.error(`DeleteCard: Invalid cardId: ${cardId}`);
@@ -84,7 +84,7 @@ const registerCardHandlers = (
       });
 
       socket.to(socket.data.boardId || '')
-        .emit('DeleteCard', cardId);
+        .emit('DeleteCard', { cardId });
     } catch (error) {
       console.error(error);
     }
@@ -102,13 +102,13 @@ const registerCardHandlers = (
 
       const rawCards = cards.map((card) => getRawCard(card));
 
-      socket.emit('CardsState', rawCards);
+      socket.emit('CardsState', { cards: rawCards });
     } catch (error) {
       console.error(error);
     }
   });
 
-  socket.on('GroupCards', async (cardId: string, stackedOn: string) => {
+  socket.on('GroupCards', async ({ cardId, stackedOn }) => {
     try {
       if (Joi.string().validate(cardId).error) {
         console.error(`GroupCards: Invalid cardId: ${cardId}`);
@@ -134,13 +134,13 @@ const registerCardHandlers = (
       await card.save();
 
       socket.to(socket.data.boardId || '')
-        .emit('CardState', getRawCard(card));
+        .emit('CardState', { card: getRawCard(card) });
     } catch (error) {
       console.error(error);
     }
   });
 
-  socket.on('UngroupCards', async (cardId: string) => {
+  socket.on('UngroupCards', async ({ cardId }) => {
     try {
       if (Joi.string().validate(cardId).error) {
         console.error(`UngroupCards: Invalid cardId: ${cardId}`);
@@ -161,13 +161,13 @@ const registerCardHandlers = (
       await card.save();
 
       socket.to(socket.data.boardId || '')
-        .emit('CardState', getRawCard(card));
+        .emit('CardState', { card: getRawCard(card) });
     } catch (error) {
       console.error(error);
     }
   });
 
-  socket.on('UpvoteCard', async (cardId: string) => {
+  socket.on('UpvoteCard', async ({ cardId }) => {
     try {
       if (Joi.string().validate(cardId).error) {
         console.error(`UpvoteCard: Invalid cardId: ${cardId}`);
@@ -193,13 +193,13 @@ const registerCardHandlers = (
       }
 
       socket.to(socket.data.boardId || '')
-        .emit('CardState', getRawCard(card));
+        .emit('CardState', { card: getRawCard(card) });
     } catch (error) {
       console.error(error);
     }
   });
 
-  socket.on('DownvoteCard', async (cardId: string) => {
+  socket.on('DownvoteCard', async ({ cardId }) => {
     try {
       if (Joi.string().validate(cardId).error) {
         console.error(`DownvoteCard: Invalid cardId: ${cardId}`);
@@ -231,7 +231,7 @@ const registerCardHandlers = (
       }
 
       socket.to(socket.data.boardId || '')
-        .emit('CardState', getRawCard(card));
+        .emit('CardState', { card: getRawCard(card) });
     } catch (error) {
       console.error(error);
     }

@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import express, { Express, Request, Response } from 'express';
+import express, { Express } from 'express';
 import dotenv from 'dotenv';
 import { Server, Socket } from 'socket.io';
 import http from 'http';
@@ -21,16 +21,14 @@ AppDataSource.initialize().then(async () => {
   console.error(error);
 });
 
-const io = new Server<IncomingEvents, OutgoingEvents, {}, User>();
+const io = new Server<IncomingEvents, OutgoingEvents, {}, User>(server, {
+  transports: ['websocket', 'polling'],
+});
 
 io.on('connection', (socket: Socket<IncomingEvents, OutgoingEvents, {}, User>) => {
   registerUserHandlers(io, socket);
   registerCardHandlers(io, socket);
   registerBoardHandlers(io, socket);
-});
-
-app.get('/', (req: Request, res: Response) => {
-  res.send('Express + TypeScript Server');
 });
 
 server.listen(port, () => {

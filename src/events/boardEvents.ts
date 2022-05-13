@@ -1,8 +1,8 @@
 export type IncomingBoardEvents = {
-  SetTimer: (duration: number) => void;
-  SetStage: (stage: number) => void;
+  SetTimer: (data: {duration: number}) => void;
+  SetStage: (data: {stage: number}) => void;
 }
 
 export type OutgoingBoardEvents = {
-  BoardConfig: (board: {stage: number, timerTo: Date}) => void;
+  BoardConfig: (data: {board: {stage: number, timerTo: Date}}) => void;
 }
