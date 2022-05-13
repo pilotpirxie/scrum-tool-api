@@ -5,13 +5,29 @@ import { IncomingEvents, OutgoingEvents } from '../events';
 import { User } from '../models/socket/User';
 import Boards from '../models/db/Boards';
 import Users, { getRawUser } from '../models/db/Users';
+import Cards, { getRawCard } from '../models/db/Cards';
 
 const registerUserHandlers = (
   io: Server<IncomingEvents, OutgoingEvents, {}, User>,
   socket: Socket<IncomingEvents, OutgoingEvents, {}, User>,
 ) => {
-  socket.on('disconnect', () => {
-    console.info('disconnected');
+  socket.on('disconnect', async () => {
+    try {
+      const user = await Users.findOneBy({
+        id: socket.data.userId,
+      });
+
+      if (!user) {
+        console.error('Disconnect: User not found');
+        return;
+      }
+
+      user.connected = false;
+
+      await user.save();
+    } catch (error) {
+      console.error(error);
+    }
   });
 
   socket.on('Join', async ({ nickname, boardId }) => {
@@ -29,11 +45,11 @@ const registerUserHandlers = (
       let board;
       if (boardId.length !== 0) {
         board = await Boards.findOneBy({
-          id: socket.data.boardId,
+          id: boardId,
         });
 
         if (!board) {
-          console.info(`Join: Board not found: ${socket.data.boardId}`);
+          console.info(`Join: Board not found: ${boardId}`);
           return;
         }
       } else {
@@ -51,6 +67,7 @@ const registerUserHandlers = (
         },
         sid: socket.id,
         isReady: false,
+        connected: true,
       }).save();
 
       if (!user) {
@@ -69,13 +86,24 @@ const registerUserHandlers = (
           board: {
             id: board.id,
           },
+          connected: true,
         },
       });
 
       const rawUsers = users.map((tmpUser) => getRawUser(tmpUser));
 
+      const cards = await Cards.find({
+        where: {
+          board: {
+            id: socket.data.boardId,
+          },
+        },
+      });
+
+      const rawCards = cards.map((card) => getRawCard(card));
+
       io.to(socket.data.boardId)
-        .emit('UsersState', { users: rawUsers });
+        .emit('Joined', { users: rawUsers, board: { id: board.id, stage: board.stage, timerTo: board.timerTo }, cards: rawCards });
     } catch (error) {
       console.error(error);
     }

@@ -42,6 +42,12 @@ export default class Users extends BaseEntity {
     isReady: boolean;
 
   @Column({
+    type: 'boolean',
+    name: 'connected',
+  })
+    connected: boolean;
+
+  @Column({
     type: 'varchar',
     length: 64,
     name: 'nickname',
