@@ -98,6 +98,7 @@ const registerUsersHandlers = (
             id: socket.data.boardId,
           },
         },
+        relations: ['user', 'votes'],
       });
 
       const rawCards = cards.map((card) => getRawCard(card));
