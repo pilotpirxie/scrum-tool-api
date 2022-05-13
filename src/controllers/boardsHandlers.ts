@@ -5,7 +5,7 @@ import { IncomingEvents, OutgoingEvents } from '../events';
 import { User } from '../models/socket/User';
 import Boards from '../models/db/Boards';
 
-const registerBoardHandlers = (
+const registerBoardsHandlers = (
   io: Server<IncomingEvents, OutgoingEvents, {}, User>,
   socket: Socket<IncomingEvents, OutgoingEvents, {}, User>,
 ) => {
@@ -65,4 +65,4 @@ const registerBoardHandlers = (
   });
 };
 
-export default registerBoardHandlers;
+export default registerBoardsHandlers;

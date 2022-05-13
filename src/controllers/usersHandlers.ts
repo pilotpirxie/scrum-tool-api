@@ -7,7 +7,7 @@ import Boards from '../models/db/Boards';
 import Users, { getRawUser } from '../models/db/Users';
 import Cards, { getRawCard } from '../models/db/Cards';
 
-const registerUserHandlers = (
+const registerUsersHandlers = (
   io: Server<IncomingEvents, OutgoingEvents, {}, User>,
   socket: Socket<IncomingEvents, OutgoingEvents, {}, User>,
 ) => {
@@ -169,4 +169,4 @@ const registerUserHandlers = (
   });
 };
 
-export default registerUserHandlers;
+export default registerUsersHandlers;

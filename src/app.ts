@@ -5,9 +5,9 @@ import { Server, Socket } from 'socket.io';
 import http from 'http';
 import { IncomingEvents, OutgoingEvents } from './events';
 import { User } from './models/socket/User';
-import registerUserHandlers from './controllers/userHandlers';
-import registerCardHandlers from './controllers/cardHandlers';
-import registerBoardHandlers from './controllers/boardHandlers';
+import registerUsersHandlers from './controllers/usersHandlers';
+import registerCardsHandlers from './controllers/cardsHandlers';
+import registerBoardsHandlers from './controllers/boardsHandlers';
 import AppDataSource from './models/db/dataSource';
 
 dotenv.config();
@@ -26,9 +26,9 @@ const io = new Server<IncomingEvents, OutgoingEvents, {}, User>(server, {
 });
 
 io.on('connection', (socket: Socket<IncomingEvents, OutgoingEvents, {}, User>) => {
-  registerUserHandlers(io, socket);
-  registerCardHandlers(io, socket);
-  registerBoardHandlers(io, socket);
+  registerUsersHandlers(io, socket);
+  registerCardsHandlers(io, socket);
+  registerBoardsHandlers(io, socket);
 });
 
 server.listen(port, () => {

@@ -5,7 +5,7 @@ import { User } from '../models/socket/User';
 import Cards, { getRawCard } from '../models/db/Cards';
 import Votes from '../models/db/Votes';
 
-const registerCardHandlers = (
+const registerCardsHandlers = (
   io: Server<IncomingEvents, OutgoingEvents, {}, User>,
   socket: Socket<IncomingEvents, OutgoingEvents, {}, User>,
 ) => {
@@ -238,4 +238,4 @@ const registerCardHandlers = (
   });
 };
 
-export default registerCardHandlers;
+export default registerCardsHandlers;

@@ -1,6 +1,6 @@
-import { IncomingUserEvents, OutgoingUserEvents } from './userEvents';
-import { IncomingCardEvents, OutgoingCardEvents } from './cardEvents';
-import { IncomingBoardEvents, OutgoingBoardEvents } from './boardEvents';
+import { IncomingUsersEvents, OutgoingUsersEvents } from './usersEvents';
+import { IncomingCardsEvents, OutgoingCardsEvents } from './cardsEvents';
+import { IncomingBoardsEvents, OutgoingBoardsEvents } from './boardsEvents';
 
-export type IncomingEvents = IncomingUserEvents & IncomingCardEvents & IncomingBoardEvents;
-export type OutgoingEvents = OutgoingUserEvents & OutgoingCardEvents & OutgoingBoardEvents;
+export type IncomingEvents = IncomingUsersEvents & IncomingCardsEvents & IncomingBoardsEvents;
+export type OutgoingEvents = OutgoingUsersEvents & OutgoingCardsEvents & OutgoingBoardsEvents;
