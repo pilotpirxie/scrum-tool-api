@@ -24,7 +24,9 @@ export default class Users extends BaseEntity {
   @OneToMany(() => Cards, (card) => card.user)
     cards: Cards[];
 
-  @ManyToOne(() => Boards, (board) => board.users)
+  @ManyToOne(() => Boards, (board) => board.users, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'board_id' })
     board: Boards;
 

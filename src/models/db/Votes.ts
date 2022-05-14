@@ -15,11 +15,15 @@ export default class Votes extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
     id: string;
 
-  @ManyToOne(() => Cards, (cards) => cards.votes)
+  @ManyToOne(() => Cards, (cards) => cards.votes, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'card_id' })
     card: Cards;
 
-  @ManyToOne(() => Users, (user) => user.votes)
+  @ManyToOne(() => Users, (user) => user.votes, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'user_id' })
     user: Users;
 

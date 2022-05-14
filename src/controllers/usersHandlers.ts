@@ -25,6 +25,19 @@ const registerUsersHandlers = (
       user.connected = false;
 
       await user.save();
+
+      const users = await Users.find({
+        where: {
+          board: {
+            id: socket.data.boardId,
+          },
+          connected: true,
+        },
+      });
+
+      const rawUsers = users.map((tmpUser) => getRawUser(tmpUser));
+
+      io.emit('UsersState', { users: rawUsers });
     } catch (error) {
       console.error(error);
     }
@@ -49,7 +62,7 @@ const registerUsersHandlers = (
         });
 
         if (!board) {
-          console.info(`Join: Board not found: ${boardId}`);
+          console.error(`Join: Board not found: ${boardId}`);
           return;
         }
       } else {

@@ -18,14 +18,18 @@ export default class Cards extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
     id: string;
 
-  @ManyToOne(() => Boards, (board) => board.cards)
+  @ManyToOne(() => Boards, (board) => board.cards, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'board_id' })
     board: Boards;
 
   @OneToMany(() => Votes, (vote) => vote.card)
     votes: Votes[];
 
-  @ManyToOne(() => Users, (user) => user.cards)
+  @ManyToOne(() => Users, (user) => user.cards, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'user_id' })
     user: Users;
 
@@ -71,8 +75,6 @@ export type RawCard = {
 }
 
 export function getRawCard(card: Cards): RawCard {
-  // eslint-disable-next-line no-console
-  console.log(card);
   return {
     id: card.id,
     stackedOn: card.stackedOn,
