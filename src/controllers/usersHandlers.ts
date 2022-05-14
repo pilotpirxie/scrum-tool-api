@@ -74,7 +74,7 @@ const registerUsersHandlers = (
 
       const user = await Users.create({
         nickname,
-        avatar: 0,
+        avatar: Math.floor(Math.random() * 89),
         board: {
           id: board.id,
         },
