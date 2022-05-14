@@ -53,8 +53,11 @@ const registerCardsHandlers = (
         return;
       }
 
-      const card = await Cards.findOneBy({
-        id: cardId,
+      const card = await Cards.findOne({
+        where: {
+          id: cardId,
+        },
+        relations: ['user', 'votes'],
       });
 
       if (!card) {
@@ -66,7 +69,7 @@ const registerCardsHandlers = (
 
       await card.save();
 
-      socket.to(socket.data.boardId || '')
+      io.to(socket.data.boardId || '')
         .emit('CardState', { card: getRawCard(card) });
     } catch (error) {
       console.error(error);
@@ -84,7 +87,7 @@ const registerCardsHandlers = (
         id: cardId,
       });
 
-      socket.to(socket.data.boardId || '')
+      io.to(socket.data.boardId || '')
         .emit('DeleteCard', { cardId });
     } catch (error) {
       console.error(error);
@@ -182,10 +185,13 @@ const registerCardsHandlers = (
         user: {
           id: socket.data.userId,
         },
-      });
+      }).save();
 
-      const card = await Cards.findOneBy({
-        id: cardId,
+      const card = await Cards.findOne({
+        where: {
+          id: cardId,
+        },
+        relations: ['votes', 'user'],
       });
 
       if (!card) {
@@ -193,7 +199,7 @@ const registerCardsHandlers = (
         return;
       }
 
-      socket.to(socket.data.boardId || '')
+      io.to(socket.data.boardId || '')
         .emit('CardState', { card: getRawCard(card) });
     } catch (error) {
       console.error(error);
@@ -222,8 +228,11 @@ const registerCardsHandlers = (
 
       await vote.remove();
 
-      const card = await Cards.findOneBy({
-        id: cardId,
+      const card = await Cards.findOne({
+        where: {
+          id: cardId,
+        },
+        relations: ['votes', 'user'],
       });
 
       if (!card) {
@@ -231,7 +240,7 @@ const registerCardsHandlers = (
         return;
       }
 
-      socket.to(socket.data.boardId || '')
+      io.to(socket.data.boardId || '')
         .emit('CardState', { card: getRawCard(card) });
     } catch (error) {
       console.error(error);
