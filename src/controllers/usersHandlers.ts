@@ -119,7 +119,7 @@ const registerUsersHandlers = (
       socket.emit('Joined', {
         localUser: getRawUser(user),
         users: rawUsers,
-        board: { id: board.id, stage: board.stage, timerTo: board.timerTo.toString() },
+        board: { id: board.id, stage: board.stage, timerTo: (new Date(board.timerTo)).getTime() },
         cards: rawCards,
       });
 
