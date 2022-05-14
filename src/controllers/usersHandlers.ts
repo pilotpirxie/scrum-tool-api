@@ -116,8 +116,14 @@ const registerUsersHandlers = (
 
       const rawCards = cards.map((card) => getRawCard(card));
 
-      io.to(socket.data.boardId)
-        .emit('Joined', { users: rawUsers, board: { id: board.id, stage: board.stage, timerTo: board.timerTo.toString() }, cards: rawCards });
+      socket.emit('Joined', {
+        localUser: getRawUser(user),
+        users: rawUsers,
+        board: { id: board.id, stage: board.stage, timerTo: board.timerTo.toString() },
+        cards: rawCards,
+      });
+
+      io.emit('UsersState', { users: rawUsers });
     } catch (error) {
       console.error(error);
     }
@@ -140,7 +146,7 @@ const registerUsersHandlers = (
 
       await user.save();
 
-      socket.to(socket.data.boardId || '')
+      io.to(socket.data.boardId || '')
         .emit('UserState', { user: getRawUser(user) });
     } catch (error) {
       console.error(error);

@@ -30,7 +30,7 @@ const registerBoardsHandlers = (
 
       await board.save();
 
-      socket.to(socket.data.boardId || '')
+      io.to(socket.data.boardId || '')
         .emit('BoardConfig', { board: { stage: board.stage, timerTo: board.timerTo.toString() } });
     } catch (error) {
       console.error(error);
@@ -57,7 +57,7 @@ const registerBoardsHandlers = (
 
       await board.save();
 
-      socket.to(socket.data.boardId || '')
+      io.to(socket.data.boardId || '')
         .emit('BoardConfig', { board: { stage: board.stage, timerTo: board.timerTo.toString() } });
     } catch (error) {
       console.error(error);

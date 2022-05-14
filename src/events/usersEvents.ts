@@ -9,6 +9,7 @@ export type IncomingUsersEvents = {
 
 export type OutgoingUsersEvents = {
   Joined: (data: {
+    localUser: RawUser,
     users: RawUser[],
     cards: RawCard[],
     board: {id: string, stage: number, timerTo: string}
