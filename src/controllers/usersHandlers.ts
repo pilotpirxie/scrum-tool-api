@@ -181,7 +181,7 @@ const registerUsersHandlers = (
 
       await user.save();
 
-      socket.to(socket.data.boardId || '')
+      io.to(socket.data.boardId || '')
         .emit('UserState', { user: getRawUser(user) });
     } catch (error) {
       console.error(error);
