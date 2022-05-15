@@ -234,11 +234,14 @@ const registerCardsHandlers = (
           card: {
             id: cardId,
           },
+          user: {
+            id: socket.data.userId,
+          },
         },
       });
 
       if (!vote) {
-        console.error(`DownvoteCard: Vote not found: ${cardId}`);
+        console.error(`DownvoteCard: Vote not found: ${cardId} ${socket.data.userId}`);
         return;
       }
 

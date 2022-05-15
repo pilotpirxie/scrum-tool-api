@@ -4,6 +4,7 @@ import Joi from 'joi';
 import { IncomingEvents, OutgoingEvents } from '../events';
 import { User } from '../models/socket/User';
 import Boards from '../models/db/Boards';
+import Users, { getRawUser } from '../models/db/Users';
 
 const registerBoardsHandlers = (
   io: Server<IncomingEvents, OutgoingEvents, {}, User>,
@@ -11,7 +12,7 @@ const registerBoardsHandlers = (
 ) => {
   socket.on('SetTimer', async ({ duration }) => {
     try {
-      if (Joi.number().allow(60, 120, 180, 300, 600, 900).validate(duration).error) {
+      if (Joi.number().allow(0, 60, 120, 180, 300, 600, 900).validate(duration).error) {
         console.error(`SetTimer: Invalid duration: ${duration}`);
         return;
       }
@@ -54,8 +55,30 @@ const registerBoardsHandlers = (
       }
 
       board.stage = stage;
+      board.timerTo = dayjs().toDate();
 
       await board.save();
+
+      await Users.update({
+        board: {
+          id: socket.data.boardId,
+        },
+      }, {
+        isReady: false,
+      });
+
+      const users = await Users.find({
+        where: {
+          board: {
+            id: board.id,
+          },
+          connected: true,
+        },
+      });
+
+      const rawUsers = users.map((tmpUser) => getRawUser(tmpUser));
+
+      io.emit('UsersState', { users: rawUsers });
 
       io.to(socket.data.boardId || '')
         .emit('BoardConfig', { board: { stage: board.stage, timerTo: (new Date(board.timerTo)).getTime() } });
