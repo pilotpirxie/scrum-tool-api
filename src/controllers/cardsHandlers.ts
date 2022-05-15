@@ -57,7 +57,12 @@ const registerCardsHandlers = (
         where: {
           id: cardId,
         },
-        relations: ['user', 'votes'],
+        relations: {
+          votes: {
+            user: true,
+          },
+          user: true,
+        },
       });
 
       if (!card) {
@@ -101,6 +106,12 @@ const registerCardsHandlers = (
           board: {
             id: socket.data.boardId,
           },
+        },
+        relations: {
+          votes: {
+            user: true,
+          },
+          user: true,
         },
       });
 
@@ -191,7 +202,12 @@ const registerCardsHandlers = (
         where: {
           id: cardId,
         },
-        relations: ['votes', 'user'],
+        relations: {
+          votes: {
+            user: true,
+          },
+          user: true,
+        },
       });
 
       if (!card) {
@@ -232,7 +248,12 @@ const registerCardsHandlers = (
         where: {
           id: cardId,
         },
-        relations: ['votes', 'user'],
+        relations: {
+          votes: {
+            user: true,
+          },
+          user: true,
+        },
       });
 
       if (!card) {

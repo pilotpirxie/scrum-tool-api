@@ -10,7 +10,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import Boards from './Boards';
-import Votes from './Votes';
+import Votes, { getRawVote, RawVote } from './Votes';
 import Users from './Users';
 
 @Entity()
@@ -71,7 +71,7 @@ export type RawCard = {
   content: string,
   userId: string,
   column: number,
-  votes: number,
+  votes: RawVote[],
 }
 
 export function getRawCard(card: Cards): RawCard {
@@ -81,6 +81,6 @@ export function getRawCard(card: Cards): RawCard {
     content: card.content,
     userId: card.user.id,
     column: card.column,
-    votes: card.votes.length,
+    votes: card.votes.map((vote) => getRawVote(vote)),
   };
 }

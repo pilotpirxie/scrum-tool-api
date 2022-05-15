@@ -39,3 +39,15 @@ export default class Votes extends BaseEntity {
   })
     updatedAt: Date;
 }
+
+export type RawVote = {
+  id: string;
+  userId: string;
+}
+
+export function getRawVote(vote: Votes): RawVote {
+  return {
+    id: vote.id,
+    userId: vote.user.id,
+  };
+}
