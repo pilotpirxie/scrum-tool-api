@@ -135,8 +135,24 @@ const registerCardsHandlers = (
         return;
       }
 
-      const card = await Cards.findOneBy({
-        id: cardId,
+      if (cardId === stackedOn) {
+        console.error(`GroupCards: CardId and stackedOn are the same: ${cardId}`);
+        return;
+      }
+
+      const card = await Cards.findOne({
+        where: {
+          id: cardId,
+          board: {
+            id: socket.data.boardId,
+          },
+        },
+        relations: {
+          votes: {
+            user: true,
+          },
+          user: true,
+        },
       });
 
       if (!card) {
@@ -148,7 +164,7 @@ const registerCardsHandlers = (
 
       await card.save();
 
-      socket.to(socket.data.boardId || '')
+      io.to(socket.data.boardId || '')
         .emit('CardState', { card: getRawCard(card) });
     } catch (error) {
       console.error(error);
@@ -162,8 +178,19 @@ const registerCardsHandlers = (
         return;
       }
 
-      const card = await Cards.findOneBy({
-        id: cardId,
+      const card = await Cards.findOne({
+        where: {
+          id: cardId,
+          board: {
+            id: socket.data.boardId,
+          },
+        },
+        relations: {
+          votes: {
+            user: true,
+          },
+          user: true,
+        },
       });
 
       if (!card) {
@@ -175,7 +202,7 @@ const registerCardsHandlers = (
 
       await card.save();
 
-      socket.to(socket.data.boardId || '')
+      io.to(socket.data.boardId || '')
         .emit('CardState', { card: getRawCard(card) });
     } catch (error) {
       console.error(error);

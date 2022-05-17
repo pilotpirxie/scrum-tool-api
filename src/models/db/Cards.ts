@@ -72,6 +72,7 @@ export type RawCard = {
   userId: string,
   column: number,
   votes: RawVote[],
+  createdAt: number,
 }
 
 export function getRawCard(card: Cards): RawCard {
@@ -82,5 +83,6 @@ export function getRawCard(card: Cards): RawCard {
     userId: card.user.id,
     column: card.column,
     votes: card.votes.map((vote) => getRawVote(vote)),
+    createdAt: card.createdAt.getTime(),
   };
 }

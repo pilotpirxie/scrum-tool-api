@@ -78,7 +78,7 @@ const registerBoardsHandlers = (
 
       const rawUsers = users.map((tmpUser) => getRawUser(tmpUser));
 
-      io.emit('UsersState', { users: rawUsers });
+      io.to(socket.data.boardId || '').emit('UsersState', { users: rawUsers });
 
       io.to(socket.data.boardId || '')
         .emit('BoardConfig', { board: { stage: board.stage, timerTo: (new Date(board.timerTo)).getTime() } });

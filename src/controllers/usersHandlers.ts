@@ -37,7 +37,7 @@ const registerUsersHandlers = (
 
       const rawUsers = users.map((tmpUser) => getRawUser(tmpUser));
 
-      io.emit('UsersState', { users: rawUsers });
+      io.to(socket.data.boardId || '').emit('UsersState', { users: rawUsers });
     } catch (error) {
       console.error(error);
     }
@@ -128,7 +128,7 @@ const registerUsersHandlers = (
         cards: rawCards,
       });
 
-      io.emit('UsersState', { users: rawUsers });
+      io.to(socket.data.boardId || '').emit('UsersState', { users: rawUsers });
     } catch (error) {
       console.error(error);
     }
