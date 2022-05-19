@@ -3,6 +3,7 @@ import express, { Express } from 'express';
 import dotenv from 'dotenv';
 import { Server, Socket } from 'socket.io';
 import http from 'http';
+import path from 'path';
 import { IncomingEvents, OutgoingEvents } from './events';
 import { User } from './models/socket/User';
 import registerUsersHandlers from './controllers/usersHandlers';
@@ -14,6 +15,11 @@ dotenv.config();
 const port = process.env.PORT;
 const app: Express = express();
 const server = http.createServer(app);
+
+app.use(express.static(path.join(__dirname, 'public')));
+app.get('(/*)?', async (req, res, next) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
 
 AppDataSource.initialize().then(async () => {
   console.info('Database connected');
