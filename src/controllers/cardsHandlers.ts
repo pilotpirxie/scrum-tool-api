@@ -4,6 +4,7 @@ import { IncomingEvents, OutgoingEvents } from '../events';
 import { User } from '../models/socket/User';
 import Cards, { getRawCard } from '../models/db/Cards';
 import Votes from '../models/db/Votes';
+import Boards from '../models/db/Boards';
 
 const registerCardsHandlers = (
   io: Server<IncomingEvents, OutgoingEvents, {}, User>,
@@ -213,6 +214,30 @@ const registerCardsHandlers = (
     try {
       if (Joi.string().validate(cardId).error) {
         console.error(`UpvoteCard: Invalid cardId: ${cardId}`);
+        return;
+      }
+
+      const board = await Boards.findOne({
+        where: {
+          id: socket.data.boardId,
+        },
+      });
+
+      if (!board) {
+        console.error(`UpvoteCard: Board not found: ${socket.data.boardId}`);
+        return;
+      }
+
+      const votesCount = await Votes.count({
+        where: {
+          user: {
+            id: socket.data.userId,
+          },
+        },
+      });
+
+      if (votesCount >= board.maxVotes && board.maxVotes > 0) {
+        console.error(`UpvoteCard: User has reached max votes: ${socket.data.userId}`);
         return;
       }
 

@@ -28,6 +28,12 @@ export default class Boards extends BaseEntity {
     stage: number;
 
   @Column({
+    type: 'integer',
+    name: 'max_votes',
+  })
+    maxVotes: number;
+
+  @Column({
     type: 'timestamp',
     name: 'timer_to',
   })

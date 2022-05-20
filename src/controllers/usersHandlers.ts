@@ -43,7 +43,7 @@ const registerUsersHandlers = (
     }
   });
 
-  socket.on('Join', async ({ nickname, boardId }) => {
+  socket.on('Join', async ({ nickname, avatar, boardId }) => {
     try {
       if (Joi.string().allow('').validate(boardId).error) {
         console.error(`Join: Invalid boardId: ${boardId}`);
@@ -68,13 +68,14 @@ const registerUsersHandlers = (
       } else {
         board = await Boards.create({
           stage: 0,
+          maxVotes: 6,
           timerTo: dayjs(),
         }).save();
       }
 
       const user = await Users.create({
         nickname,
-        avatar: Math.floor(Math.random() * 89),
+        avatar,
         board: {
           id: board.id,
         },
@@ -124,7 +125,12 @@ const registerUsersHandlers = (
       socket.emit('Joined', {
         localUser: getRawUser(user),
         users: rawUsers,
-        board: { id: board.id, stage: board.stage, timerTo: (new Date(board.timerTo)).getTime() },
+        board: {
+          id: board.id,
+          stage: board.stage,
+          maxVotes: board.maxVotes,
+          timerTo: (new Date(board.timerTo)).getTime(),
+        },
         cards: rawCards,
       });
 

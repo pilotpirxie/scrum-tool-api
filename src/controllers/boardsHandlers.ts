@@ -32,7 +32,46 @@ const registerBoardsHandlers = (
       await board.save();
 
       io.to(socket.data.boardId || '')
-        .emit('BoardConfig', { board: { stage: board.stage, timerTo: (new Date(board.timerTo)).getTime() } });
+        .emit('BoardConfig', {
+          board: {
+            stage: board.stage,
+            timerTo: (new Date(board.timerTo)).getTime(),
+            maxVotes: board.maxVotes,
+          },
+        });
+    } catch (error) {
+      console.error(error);
+    }
+  });
+
+  socket.on('SetMaxVotes', async ({ maxVotes }) => {
+    try {
+      if (Joi.number().min(0).max(30).validate(maxVotes).error) {
+        console.error(`SetMaxVotes: Invalid maxVotes: ${maxVotes}`);
+        return;
+      }
+
+      const board = await Boards.findOneBy({
+        id: socket.data.boardId,
+      });
+
+      if (!board) {
+        console.error(`SetMaxVotes: Board not found: ${socket.data.boardId}`);
+        return;
+      }
+
+      board.maxVotes = maxVotes;
+
+      await board.save();
+
+      io.to(socket.data.boardId || '')
+        .emit('BoardConfig', {
+          board: {
+            stage: board.stage,
+            timerTo: (new Date(board.timerTo)).getTime(),
+            maxVotes: board.maxVotes,
+          },
+        });
     } catch (error) {
       console.error(error);
     }
@@ -81,7 +120,13 @@ const registerBoardsHandlers = (
       io.to(socket.data.boardId || '').emit('UsersState', { users: rawUsers });
 
       io.to(socket.data.boardId || '')
-        .emit('BoardConfig', { board: { stage: board.stage, timerTo: (new Date(board.timerTo)).getTime() } });
+        .emit('BoardConfig', {
+          board: {
+            stage: board.stage,
+            timerTo: (new Date(board.timerTo)).getTime(),
+            maxVotes: board.maxVotes,
+          },
+        });
     } catch (error) {
       console.error(error);
     }
