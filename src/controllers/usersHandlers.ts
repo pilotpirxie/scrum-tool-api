@@ -3,7 +3,7 @@ import Joi from 'joi';
 import dayjs from 'dayjs';
 import { IncomingEvents, OutgoingEvents } from '../events';
 import { User } from '../models/socket/User';
-import Boards from '../models/db/Boards';
+import Boards, { BoardMode } from '../models/db/Boards';
 import Users, { getRawUser } from '../models/db/Users';
 import Cards, { getRawCard } from '../models/db/Cards';
 
@@ -70,6 +70,7 @@ const registerUsersHandlers = (
           stage: 0,
           maxVotes: 6,
           timerTo: dayjs(),
+          mode: BoardMode.RETRO,
         }).save();
       }
 
@@ -82,6 +83,7 @@ const registerUsersHandlers = (
         sid: socket.id,
         isReady: false,
         connected: true,
+        selectedPlanningCard: 0,
       }).save();
 
       if (!user) {
@@ -130,6 +132,7 @@ const registerUsersHandlers = (
           stage: board.stage,
           maxVotes: board.maxVotes,
           timerTo: (new Date(board.timerTo)).getTime(),
+          mode: board.mode,
         },
         cards: rawCards,
       });
@@ -154,6 +157,36 @@ const registerUsersHandlers = (
       }
 
       user.isReady = !user.isReady;
+
+      await user.save();
+
+      io.to(socket.data.boardId || '')
+        .emit('UserState', { user: getRawUser(user) });
+    } catch (error) {
+      console.error(error);
+    }
+  });
+
+  socket.on('SetSelectedPlanningCard', async ({ selectedPlanningCard }) => {
+    try {
+      const user = await Users.findOne({
+        where: {
+          id: socket.data.userId,
+        },
+      });
+
+      if (!user) {
+        console.error(`SetSelectedPlanningCard: User not found: ${socket.data.userId}`);
+        return;
+      }
+
+      if (user.selectedPlanningCard === selectedPlanningCard) {
+        user.selectedPlanningCard = 0;
+        user.isReady = false;
+      } else {
+        user.selectedPlanningCard = selectedPlanningCard;
+        user.isReady = true;
+      }
 
       await user.save();
 

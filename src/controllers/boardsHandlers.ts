@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import Joi from 'joi';
 import { IncomingEvents, OutgoingEvents } from '../events';
 import { User } from '../models/socket/User';
-import Boards from '../models/db/Boards';
+import Boards, { BoardMode } from '../models/db/Boards';
 import Users, { getRawUser } from '../models/db/Users';
 
 const registerBoardsHandlers = (
@@ -37,6 +37,7 @@ const registerBoardsHandlers = (
             stage: board.stage,
             timerTo: (new Date(board.timerTo)).getTime(),
             maxVotes: board.maxVotes,
+            mode: board.mode,
           },
         });
     } catch (error) {
@@ -70,6 +71,69 @@ const registerBoardsHandlers = (
             stage: board.stage,
             timerTo: (new Date(board.timerTo)).getTime(),
             maxVotes: board.maxVotes,
+            mode: board.mode,
+          },
+        });
+    } catch (error) {
+      console.error(error);
+    }
+  });
+
+  socket.on('SetBoardMode', async ({ mode }) => {
+    try {
+      if (Joi.number().allow(
+        BoardMode.RETRO,
+        BoardMode.PLANNING_HIDDEN,
+        BoardMode.PLANNING_REVEALED,
+      ).validate(mode).error) {
+        console.error(`SetBoardMode: Invalid mode: ${mode}`);
+        return;
+      }
+
+      const board = await Boards.findOneBy({
+        id: socket.data.boardId,
+      });
+
+      if (!board) {
+        console.error(`SetBoardMode: Board not found: ${socket.data.boardId}`);
+        return;
+      }
+
+      if (mode === 'planning_hidden') {
+        await Users.update({
+          board: {
+            id: socket.data.boardId,
+          },
+        }, {
+          isReady: false,
+          selectedPlanningCard: 0,
+        });
+
+        const users = await Users.find({
+          where: {
+            board: {
+              id: board.id,
+            },
+            connected: true,
+          },
+        });
+
+        const rawUsers = users.map((tmpUser) => getRawUser(tmpUser));
+
+        io.to(socket.data.boardId || '').emit('UsersState', { users: rawUsers });
+      }
+
+      board.mode = mode;
+
+      await board.save();
+
+      io.to(socket.data.boardId || '')
+        .emit('BoardConfig', {
+          board: {
+            stage: board.stage,
+            timerTo: (new Date(board.timerTo)).getTime(),
+            maxVotes: board.maxVotes,
+            mode: board.mode,
           },
         });
     } catch (error) {
@@ -125,6 +189,7 @@ const registerBoardsHandlers = (
             stage: board.stage,
             timerTo: (new Date(board.timerTo)).getTime(),
             maxVotes: board.maxVotes,
+            mode: board.mode,
           },
         });
     } catch (error) {

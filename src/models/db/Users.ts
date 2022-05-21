@@ -62,6 +62,12 @@ export default class Users extends BaseEntity {
   })
     avatar: number;
 
+  @Column({
+    type: 'integer',
+    name: 'selected_planning_card',
+  })
+    selectedPlanningCard: number;
+
   @CreateDateColumn({
     type: 'timestamp',
     name: 'created_at',
@@ -80,13 +86,15 @@ export type RawUser = {
   nickname: string,
   avatar: number,
   isReady: boolean,
+  selectedPlanningCard: number,
 }
 
 export function getRawUser(user: Users): RawUser {
   return {
     id: user.id,
+    nickname: user.nickname,
     avatar: user.avatar,
     isReady: user.isReady,
-    nickname: user.nickname,
+    selectedPlanningCard: user.selectedPlanningCard,
   };
 }

@@ -10,6 +10,12 @@ import {
 import Cards from './Cards';
 import Users from './Users';
 
+export enum BoardMode {
+  RETRO= 'retro',
+  PLANNING_HIDDEN = 'planning_hidden',
+  PLANNING_REVEALED = 'planning_revealed',
+}
+
 @Entity()
 export default class Boards extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
@@ -32,6 +38,14 @@ export default class Boards extends BaseEntity {
     name: 'max_votes',
   })
     maxVotes: number;
+
+  @Column({
+    type: 'enum',
+    enum: BoardMode,
+    default: BoardMode.RETRO,
+    name: 'mode',
+  })
+    mode: string;
 
   @Column({
     type: 'timestamp',
