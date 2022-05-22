@@ -40,27 +40,22 @@ export default class Boards extends BaseEntity {
     maxVotes: number;
 
   @Column({
-    type: 'enum',
-    enum: BoardMode,
-    default: BoardMode.RETRO,
+    type: 'varchar',
     name: 'mode',
   })
     mode: string;
 
   @Column({
-    type: 'timestamp',
     name: 'timer_to',
   })
     timerTo: Date;
 
   @CreateDateColumn({
-    type: 'timestamp',
     name: 'created_at',
   })
     createdAt: Date;
 
   @UpdateDateColumn({
-    type: 'timestamp',
     name: 'updated_at',
   })
     updatedAt: Date;

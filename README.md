@@ -59,7 +59,7 @@ npm -v
 sudo apt install build-essential
 ```
 
-Install postgres, create new database and setup user.
+If you are using API with postgres only (if you stick to default sqlite3, you can skip this) install postgres, create new database and setup user.
 ```shell
 sudo apt install postgresql postgresql-contrib
 sudo systemctl start postgresql.service
