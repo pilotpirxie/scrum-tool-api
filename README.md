@@ -2,6 +2,8 @@
 Simple tool for scrum ceremonies. Perfect for retrospective and planning meetings. 
 Written in TypeScript, using WebSockets, Node and React.
 
+[Link to the repository with client](https://github.com/pilotpirxie/scrum-tool-client)
+
 ### Features
 * Quick and easy to use
 * No registration required
