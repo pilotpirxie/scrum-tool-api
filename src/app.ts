@@ -12,7 +12,7 @@ import registerBoardsHandlers from './controllers/boardsHandlers';
 import AppDataSource from './models/db/dataSource';
 
 dotenv.config();
-const port = process.env.PORT;
+const port = process.env.PORT || 3000;
 const app: Express = express();
 const server = http.createServer(app);
 
