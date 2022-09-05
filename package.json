@@ -1,7 +1,7 @@
 {
   "name": "scrum-tool-api",
   "version": "1.0.0",
-  "main": "src/app.ts",
+  "main": "./src/app.ts",
   "repository": "https://github.com/pilotpirxie/scrum-tool-api.git",
   "author": "pilotpirxie <10637666+pilotpirxie@users.noreply.github.com>",
   "license": "MIT",
@@ -28,7 +28,9 @@
     "typescript": "^4.6.4"
   },
   "scripts": {
-    "prod": "ts-node ./src/app.ts",
+    "prod:js": "node ./dist/app.js",
+    "prod:ts": "ts-node ./src/app.ts",
+    "build": "tsc",
     "dev": "nodemon",
     "eslint": "./node_modules/.bin/eslint .",
     "fix": "./node_modules/.bin/eslint --fix ."
