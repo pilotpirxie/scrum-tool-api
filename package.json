@@ -30,7 +30,7 @@
   "scripts": {
     "prod:js": "node ./dist/app.js",
     "prod:ts": "ts-node ./src/app.ts",
-    "build": "tsc",
+    "build": "tsc && cp -r public dist",
     "dev": "nodemon",
     "eslint": "./node_modules/.bin/eslint .",
     "fix": "./node_modules/.bin/eslint --fix ."
