@@ -69,7 +69,7 @@ const registerUsersHandlers = (
         board = await Boards.create({
           stage: 0,
           maxVotes: 6,
-          timerTo: dayjs(),
+          timerTo: dayjs().toDate(),
           mode: BoardMode.RETRO,
         }).save();
       }
