@@ -24,5 +24,12 @@ module.exports = {
     'no-console': ['error', { allow: ['warn', 'error', 'info'] }],
     'import/no-cycle': 'off',
     'no-param-reassign': 'off',
+    'import/prefer-default-export': 'off',
+    'import/no-unresolved': 'off',
+    'linebreak-style': 'off',
+    'no-underscore-dangle': 'off',
+    'no-plusplus': 'off',
+    'no-restricted-syntax': 'off',
+    'class-methods-use-this': 'off',
   },
 };
