@@ -28,8 +28,6 @@ AppDataSource.initialize().then(async () => {
 });
 
 const io = new Server<IncomingEvents, OutgoingEvents, {}, User>(server, {
-  connectTimeout: 10000,
-  pingTimeout: 5000,
   transports: ['websocket', 'polling'],
 });
 
